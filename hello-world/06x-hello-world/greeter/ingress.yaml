@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: greeter
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: greeter
+              servicePort: http

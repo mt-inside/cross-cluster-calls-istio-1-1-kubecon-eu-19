@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeter
+spec:
+  selector:
+    matchLabels:
+      app: greeter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: greeter
+    spec:
+      containers:
+        - name: greeter
+          image: docker.io/mtinside/hello-world-greeter:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 100m
+            limits:
+              memory: 500Mi
+              cpu: 500m

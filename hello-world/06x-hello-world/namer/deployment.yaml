@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: namer
+spec:
+  selector:
+    matchLabels:
+      app: namer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: namer
+    spec:
+      containers:
+        - name: namer
+          image: docker.io/mtinside/hello-world-namer:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 100m
+            limits:
+              memory: 500Mi
+              cpu: 500m
+          volumeMounts:
+            - name: name-volume
+              mountPath: /etc/namer
+      volumes:
+        - name: name-volume
+          configMap:
+            name: name
